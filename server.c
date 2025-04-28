@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
@@ -34,17 +39,6 @@ int main() {
     addr.sin_addr.s_addr = htonl(0); // wildcard IP 0.0.0.0
     int rv = bind(fd, (const struct sockaddr *)&addr, sizeof(addr));
     if (rv) {die("bind()");}
-
-    struct sockaddr_in
-    {
-        uint16_t sin_family; // AF_INET
-        uint16_t sin_port; // Port in big-endian
-        struct in_addr sin_addr; // IPv4
-    };
-
-    struct in_addr {
-        uint32_t s_addr; // IPv4 in big-endian
-    }
 
     // Listen creates the socket, with the 2nd arg being the size of the queue.
     rv = listen(fd, SOMAXCONN);
