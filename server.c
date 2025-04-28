@@ -2,6 +2,19 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 
+static void do_something(int connfd) {
+    char rbuf[64] = {};
+    ssize_t n = read(connfd, rbuf, sizeof(rbuf) - 1);
+    if (n < 0) {
+        msg("read() error");
+        return;
+    }
+    printf("client says: %s\n/", rbuf);
+
+    char wbuf[] = "world";
+    write(connfd, wbuf, strlen(wbuf));
+}
+
 int main() {
 
     // Sets fd to a socket of @param AF_INET for IPv4, @param SOCK_STREAM for TCP, and no need for the third arg
@@ -11,7 +24,7 @@ int main() {
     // The fourth arg sets the option value, and the fifth is to determine option type
     // This particular call sets @param SO_REUSEADDR to 1 so the server program can't bind to the same IP:port after restart
     int val = 1;
-    setsockopt(fd, SOL_SOCKET, SO_REUSEAADR, &val, sizeof(val));
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
 
     // Binds wildcard address to 0.0.0.0:1234, which is a parameter for listen(), stored as big-endian numbers converted by
     // htons and htonl
@@ -40,6 +53,14 @@ int main() {
     // Server enters a loop that accepts and then processes each client
     while (true) {
         struct sockaddr_in client_addr = {};
+        socklen_t addrlen = sizeof(client_addr);
+        int connfd = accept(fd, (struct sockaddr *)&client_addr, &addrlen);
+        if (connfd < 0){
+            continue; // Error
+        }
+
+        do_something(connfd);
+        close(connfd);
     }
     
 
