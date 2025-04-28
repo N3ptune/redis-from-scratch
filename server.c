@@ -36,6 +36,11 @@ int main() {
     // Listen creates the socket, with the 2nd arg being the size of the queue.
     rv = listen(fd, SOMAXCONN);
     if (rv) {die("listen()"); }
+
+    // Server enters a loop that accepts and then processes each client
+    while (true) {
+        struct sockaddr_in client_addr = {};
+    }
     
 
     return 0;
