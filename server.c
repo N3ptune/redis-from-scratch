@@ -7,6 +7,18 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 
+
+void die(const char *msg) {
+    perror(msg);
+    exit(1);
+}
+
+
+void msg(const char *m) {
+    perror(m);
+}
+
+
 static void do_something(int connfd) {
     char rbuf[64] = {};
     ssize_t n = read(connfd, rbuf, sizeof(rbuf) - 1);
@@ -20,14 +32,6 @@ static void do_something(int connfd) {
     write(connfd, wbuf, strlen(wbuf));
 }
 
-void die(const char *msg) {
-    perror(msg);
-    exit(1);
-}
-
-void msg(const char *m) {
-    perror(m);
-}
 
 int main() {
 
