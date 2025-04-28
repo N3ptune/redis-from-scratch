@@ -20,6 +20,15 @@ static void do_something(int connfd) {
     write(connfd, wbuf, strlen(wbuf));
 }
 
+void die(const char *msg) {
+    perror(msg);
+    exit(1);
+}
+
+void msg(const char *m) {
+    perror(m);
+}
+
 int main() {
 
     // Sets fd to a socket of @param AF_INET for IPv4, @param SOCK_STREAM for TCP, and no need for the third arg
