@@ -1,6 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+
+void die(const char *msg) {
+    perror(msg);
+    exit(1);
+}
+
+
+void msg(const char *m) {
+    perror(m);
+}
+
 
 int main() {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
